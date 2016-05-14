@@ -1,0 +1,29 @@
+== Motivation
+
+The Java JDK includes various means of creating/consuming compressed files.
+What is missing is easy way of creating _lazy streamed_ zip archive, in spirit of
+`java.util.zip.DeflaterInputStream`.
+
+This implementation relies on the fact that the PKZIP specification
+allows archiving data streams of sizes not known upfront. This implies that
+the archives produced will be readable only by tools aware of this trick.
+Notably, `java.util.zip.ZipInputStream` is OK with that, so we use it to
+test compatibility.
+
+== Using
+
+[source,java]
+----
+ZipperInputStream lzis = new ZipperInputStream(...);
+----
+
+See more detailed example in `io.tair.zip.ZipperInputStreamTest`
+
+== TODO
+
+[options=interactive]
+- [ ] Put the correct file modification time and date
+- [ ] Support ZIP64 format extensions for really BIG files
+- [ ] Check duplicate file names?
+
+Pull requests are welcome!
