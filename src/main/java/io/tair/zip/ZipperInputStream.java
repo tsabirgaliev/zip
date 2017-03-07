@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 Tair Sabyrgaliyev
+ * Copyright 2017 Tair Sabyrgaliyev
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,12 +22,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.SequenceInputStream;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.zip.CRC32;
 import java.util.zip.CheckedInputStream;
@@ -108,8 +103,30 @@ public class ZipperInputStream extends SequenceInputStream {
 
         long compression_method = 8; // DEFLATE
 
-        byte[] modification_time = {0x49, (byte)0x88}
-        , modification_date = {(byte)0xa8, 0x48}
+        static byte[] currentDosTime(Calendar cal) {
+            int result = cal.get(Calendar.HOUR_OF_DAY) * 2048
+                       + cal.get(Calendar.MINUTE)      * 32
+                       + cal.get(Calendar.SECOND)      / 2;
+
+            return new byte[] {
+                    (byte)(result >> 0),
+                    (byte)(result >> 8)
+            };
+        }
+
+        static byte[] currentDosDate(Calendar cal) {
+            int result = (cal.get(Calendar.YEAR) - 1980) * 512
+                       + (cal.get(Calendar.MONTH) + 1) * 32
+                       + cal.get(Calendar.DATE);
+
+            return new byte[] {
+                    (byte)(result >> 0),
+                    (byte)(result >> 8)
+            };
+        }
+
+        byte[] modification_time = currentDosTime(Calendar.getInstance())
+        , modification_date = currentDosDate(Calendar.getInstance())
         ;
 
         long crc32_checksum = 0

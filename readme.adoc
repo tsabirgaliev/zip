@@ -22,7 +22,7 @@ See more detailed example in `io.tair.zip.ZipperInputStreamTest`
 == TODO
 
 [options=interactive]
-- [ ] Put the correct file modification time and date
+- [x] Put the correct file modification time and date
 - [ ] Support ZIP64 format extensions for really BIG files
 - [ ] Check duplicate file names?
 
