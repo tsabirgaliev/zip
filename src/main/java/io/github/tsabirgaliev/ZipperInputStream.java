@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.tair.zip;
+package io.github.tsabirgaliev;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -104,9 +104,9 @@ public class ZipperInputStream extends SequenceInputStream {
         long compression_method = 8; // DEFLATE
 
         static byte[] currentDosTime(Calendar cal) {
-            int result = cal.get(Calendar.HOUR_OF_DAY) * 2048
-                       + cal.get(Calendar.MINUTE)      * 32
-                       + cal.get(Calendar.SECOND)      / 2;
+            int result = (cal.get(Calendar.HOUR_OF_DAY) << 11)
+                       | (cal.get(Calendar.MINUTE)      << 5)
+                       | (cal.get(Calendar.SECOND)      / 2);
 
             return new byte[] {
                     (byte)(result >> 0),
@@ -115,9 +115,9 @@ public class ZipperInputStream extends SequenceInputStream {
         }
 
         static byte[] currentDosDate(Calendar cal) {
-            int result = (cal.get(Calendar.YEAR) - 1980) * 512
-                       + (cal.get(Calendar.MONTH) + 1) * 32
-                       + cal.get(Calendar.DATE);
+            int result = ((cal.get(Calendar.YEAR) - 1980) << 9)
+                       | ((cal.get(Calendar.MONTH) + 1)   << 5)
+                       | cal.get(Calendar.DATE);
 
             return new byte[] {
                     (byte)(result >> 0),
@@ -129,7 +129,7 @@ public class ZipperInputStream extends SequenceInputStream {
         , modification_date = currentDosDate(Calendar.getInstance())
         ;
 
-        long crc32_checksum = 0
+        final long crc32_checksum = 0
         , compressed_size   = 0
         , uncompressed_size = 0
         ;

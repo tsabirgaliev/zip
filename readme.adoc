@@ -17,7 +17,7 @@ test compatibility.
 ZipperInputStream lzis = new ZipperInputStream(...);
 ----
 
-See more detailed example in `io.tair.zip.ZipperInputStreamTest`
+See more detailed example in `io.github.tsabirgaliev.ZipperInputStreamTest`
 
 == TODO
 
